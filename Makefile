@@ -8,6 +8,13 @@ pre-build:
 live-run:
 	air
 
+GCR=asia-southeast1-docker.pkg.dev/personal-232705/agung-docker-repo
 TAG=latest
 docker-build:
-	docker build -t golang-htmx:$(TAG) .
+	docker build -t golang-htmx:$(TAG) -t $(GCR)/golang-htmx:$(TAG) . 
+
+gcr-push:
+	docker push $(GCR)/golang-htmx:$(TAG)
+
+deploy-cloud-run:
+	gcloud run deploy golang-htmx --image $(GCR)/golang-htmx:$(TAG) --region asia-southeast1 --port=5050
