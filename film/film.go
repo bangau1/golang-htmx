@@ -1,6 +1,9 @@
 package film
 
-import "context"
+import (
+	"context"
+	"errors"
+)
 
 type Film struct {
 	Id        string
@@ -8,6 +11,8 @@ type Film struct {
 	Director  string
 	PosterURL string
 }
+
+var ErrNotFound = errors.New("not found error")
 
 type FilmService interface {
 	GetFilms(ctx context.Context) ([]Film, error)
@@ -49,6 +54,10 @@ func (i *InMemoryFilmService) GetFilm(ctx context.Context, filmId string) (Film,
 }
 
 func (i *InMemoryFilmService) DeleteFilm(ctx context.Context, filmId string) error {
+	_, found := i.data[filmId]
+	if !found {
+		return ErrNotFound
+	}
 	delete(i.data, filmId)
 	return nil
 }

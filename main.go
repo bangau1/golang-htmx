@@ -1,8 +1,8 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 
@@ -40,7 +40,13 @@ func (c *Controller) getFilm(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) deleteFilm(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, fmt.Sprintf("deleting film with id=%s\n", r.PathValue("id")))
+	filmId := r.PathValue("id")
+	err := c.filmService.DeleteFilm(r.Context(), filmId)
+	if errors.Is(err, film.ErrNotFound) {
+		w.WriteHeader(404)
+		return
+	}
+	return
 }
 
 func main() {

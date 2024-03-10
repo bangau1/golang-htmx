@@ -6,7 +6,7 @@ import (
 )
 
 templ FilmTile(film film.Film) {
-<div class="thumbnail">
+<div class="thumbnail" id={film.Id}>
     <a href={ templ.SafeURL(fmt.Sprintf("/films/%s", film.Id)) }>
       <img src={ film.PosterURL } alt="Movie Poster"/>
     </a>
@@ -14,5 +14,9 @@ templ FilmTile(film film.Film) {
       <h3>{ film.Title }</h3>
       <p>Directed by: { film.Director }</p>
     </div>
+    <button
+      hx-delete={ fmt.Sprintf("/films/%s", film.Id) }
+      hx-confirm="Are you sure you wish to delete this film?"
+      type="button" class="btn btn-danger btn-small">Delete</button>
 </div>
 }
