@@ -11,9 +11,11 @@ templ FilmDetail(film film.Film) {
 @head()
 </html>
 <body>
-
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-@FilmTile(film)
-</div>
+	<h1>Film Details</h1>
+	<div class="row">
+	<div class="col-sm-6 col-md-4">
+		@FilmTile(film)
+	</div>
+	</div>
 </body>
 }

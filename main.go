@@ -36,7 +36,7 @@ func (c *Controller) getFilm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	view.FilmTile(film).Render(ctx, w)
+	view.FilmDetail(film).Render(ctx, w)
 }
 
 func (c *Controller) deleteFilm(w http.ResponseWriter, r *http.Request) {

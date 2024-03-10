@@ -7,7 +7,7 @@ import (
 templ FilmList(films []film.Film) {
 <div class="row">
     for _, film := range films {
-      <div class="col-md-4">
+      <div class="col-sm-6 col-md-4">
       @FilmTile(film)
       </div>
     }
