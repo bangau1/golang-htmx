@@ -46,7 +46,6 @@ func (c *Controller) deleteFilm(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(404)
 		return
 	}
-	return
 }
 
 func main() {
@@ -57,9 +56,18 @@ func main() {
 
 	addr := ":5050"
 
+	// add logging to troubleshoot assets data
+	loggingHandler := func(h http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			l := &loggingResponseWriter{w, 0}
+			h.ServeHTTP(l, r)
+			log.Printf("code=%d path=%s", l.statusCode, r.URL.Path)
+		})
+	}
+
 	// serve static assets file a simple fileserver
 	assetsFs := http.FileServer(http.Dir("./assets"))
-	c.router.Handle("GET /assets/", http.StripPrefix("/assets/", assetsFs))
+	c.router.Handle("GET /assets/", loggingHandler(http.StripPrefix("/assets/", assetsFs)))
 
 	// then the rest are related with our pages
 	c.router.HandleFunc("GET /", c.homePage)
@@ -72,6 +80,17 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+}
+
+type loggingResponseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func (l *loggingResponseWriter) WriteHeader(statusCode int) {
+	l.statusCode = statusCode
+	l.ResponseWriter.WriteHeader(statusCode)
 
 }
 
