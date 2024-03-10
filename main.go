@@ -77,15 +77,15 @@ func init() {
 
 var (
 	movies = []film.Film{
-		{Title: "The Shawshank Redemption", Director: "Frank Darabont", PosterURL: "./assets/01.jpeg"},
-		{Title: "The Godfather", Director: "Francis Ford Coppola", PosterURL: "./assets/02.jpeg"},
-		{Title: "The Dark Knight", Director: "Christopher Nolan", PosterURL: "./assets/03.jpeg"},
-		{Title: "Pulp Fiction", Director: "Quentin Tarantino", PosterURL: "./assets/04.jpeg"},
-		{Title: "Schindler's List", Director: "Steven Spielberg", PosterURL: "./assets/05.jpeg"},
-		{Title: "12 Angry Men", Director: "Sidney Lumet", PosterURL: "./assets/06.jpeg"},
-		{Title: "The Lord of the Rings: The Return of the King", Director: "Peter Jackson", PosterURL: "./assets/07.jpeg"},
-		{Title: "Fight Club", Director: "David Fincher", PosterURL: "./assets/08.jpeg"},
-		{Title: "Parasite", Director: "Bong Joon-ho", PosterURL: "./assets/09.jpeg"},
-		{Title: "Inception", Director: "Christopher Nolan", PosterURL: "./assets/10.jpeg"},
+		{Title: "The Shawshank Redemption", Director: "Frank Darabont", PosterURL: "/assets/01.jpeg"},
+		{Title: "The Godfather", Director: "Francis Ford Coppola", PosterURL: "/assets/02.jpeg"},
+		{Title: "The Dark Knight", Director: "Christopher Nolan", PosterURL: "/assets/03.jpeg"},
+		{Title: "Pulp Fiction", Director: "Quentin Tarantino", PosterURL: "/assets/04.jpeg"},
+		{Title: "Schindler's List", Director: "Steven Spielberg", PosterURL: "/assets/05.jpeg"},
+		{Title: "12 Angry Men", Director: "Sidney Lumet", PosterURL: "/assets/06.jpeg"},
+		{Title: "The Lord of the Rings: The Return of the King", Director: "Peter Jackson", PosterURL: "/assets/07.jpeg"},
+		{Title: "Fight Club", Director: "David Fincher", PosterURL: "/assets/08.jpeg"},
+		{Title: "Parasite", Director: "Bong Joon-ho", PosterURL: "/assets/09.jpeg"},
+		{Title: "Inception", Director: "Christopher Nolan", PosterURL: "/assets/10.jpeg"},
 	}
 )
