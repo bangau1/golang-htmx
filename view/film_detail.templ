@@ -1,0 +1,19 @@
+
+package view
+
+import (
+
+	"github.com/bangau1/golang-htmx/film"
+)
+
+templ FilmDetail(film film.Film) {
+<html lang="en">
+@head()
+</html>
+<body>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+@FilmTile(film)
+</div>
+</body>
+}

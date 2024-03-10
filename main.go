@@ -28,7 +28,15 @@ func (c *Controller) homePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) getFilm(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, fmt.Sprintf("accessing film with id=%s\n", r.PathValue("id")))
+	ctx := r.Context()
+	filmId := r.PathValue("id")
+	film, err := c.filmService.GetFilm(ctx, filmId)
+	if err != nil {
+		view.Error(fmt.Sprintf("%v", err)).Render(ctx, w)
+		return
+	}
+
+	view.FilmTile(film).Render(ctx, w)
 }
 
 func (c *Controller) deleteFilm(w http.ResponseWriter, r *http.Request) {
