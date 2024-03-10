@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/bangau1/golang-htmx/film"
 	"github.com/bangau1/golang-htmx/view"
@@ -32,6 +33,7 @@ func (c *Controller) getFilm(w http.ResponseWriter, r *http.Request) {
 	filmId := r.PathValue("id")
 	film, err := c.filmService.GetFilm(ctx, filmId)
 	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
 		view.Error(fmt.Sprintf("%v", err)).Render(ctx, w)
 		return
 	}
@@ -43,7 +45,7 @@ func (c *Controller) deleteFilm(w http.ResponseWriter, r *http.Request) {
 	filmId := r.PathValue("id")
 	err := c.filmService.DeleteFilm(r.Context(), filmId)
 	if errors.Is(err, film.ErrNotFound) {
-		w.WriteHeader(404)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 }
@@ -56,18 +58,9 @@ func main() {
 
 	addr := ":5050"
 
-	// add logging to troubleshoot assets data
-	loggingHandler := func(h http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			l := &loggingResponseWriter{w, 0}
-			h.ServeHTTP(l, r)
-			log.Printf("code=%d path=%s", l.statusCode, r.URL.Path)
-		})
-	}
-
 	// serve static assets file a simple fileserver
 	assetsFs := http.FileServer(http.Dir("./assets"))
-	c.router.Handle("GET /assets/", loggingHandler(http.StripPrefix("/assets/", assetsFs)))
+	c.router.Handle("GET /assets/", LoggingRequestHandler(http.StripPrefix("/assets/", assetsFs)))
 
 	// then the rest are related with our pages
 	c.router.HandleFunc("GET /", c.homePage)
@@ -76,11 +69,23 @@ func main() {
 
 	log.Println("starting server at " + addr)
 
-	err := http.ListenAndServe(addr, c.router)
+	err := http.ListenAndServe(addr, LoggingRequestHandler(c.router))
 	if err != nil {
 		fmt.Println(err)
 	}
 
+}
+
+func LoggingRequestHandler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		l := &loggingResponseWriter{w, http.StatusOK}
+		start := time.Now()
+		defer func() {
+			log.Printf("method=%s code=%d path=%s elapsed=%d", r.Method, l.statusCode, r.URL.Path, time.Since(start).Milliseconds())
+		}()
+
+		next.ServeHTTP(l, r)
+	})
 }
 
 type loggingResponseWriter struct {

@@ -50,6 +50,11 @@ func (i *InMemoryFilmService) GetFilms(ctx context.Context) ([]Film, error) {
 }
 
 func (i *InMemoryFilmService) GetFilm(ctx context.Context, filmId string) (Film, error) {
+	_, found := i.data[filmId]
+	if !found {
+		return Film{}, ErrNotFound
+	}
+
 	return i.data[filmId], nil
 }
 
