@@ -10,8 +10,9 @@ live-run:
 
 GCR=asia-southeast1-docker.pkg.dev/personal-232705/agung-docker-repo
 TAG=latest
+PLATFORM=linux/amd64
 docker-build:
-	docker build -t golang-htmx:$(TAG) -t $(GCR)/golang-htmx:$(TAG) . 
+	docker build --platform $(PLATFORM) -t golang-htmx:$(TAG) -t $(GCR)/golang-htmx:$(TAG) . 
 
 gcr-push:
 	docker push $(GCR)/golang-htmx:$(TAG)
